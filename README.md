@@ -1,6 +1,6 @@
 # bltColor
 
-(./example.png)
+![Example](/example.png)
 
 a color Class for BearLibTerminal that adds libtcod-like color functions.
 
