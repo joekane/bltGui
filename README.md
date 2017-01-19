@@ -2,7 +2,7 @@
 
 ![Example](/example.png)
 
-a color Class for BearLibTerminal that adds libtcod-like color functions.
+A color Class for BearLibTerminal that adds libtcod-like color functions.
 
 ## Features:
 * Set alpha of a color.
