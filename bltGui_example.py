@@ -25,10 +25,10 @@ def initilize():
 
     dkrgry = bltColor('darkest grey').trans(200)
 
-    control_frame = Frame(55, 30, 20 ,15, "Control Test", visible=True, color='light blue', bkcolor=bltColor('dark blue').trans(255), draggable=True, skin='SOLID')
+    control_frame = Frame(55, 30, 20 ,15, "Control Test", visible=True, draggable=True, skin='SOLID')
     #control_frame.add_control(bltButton(control_frame, control_frame.width/2, 5, "X", length=10, function=bltButton.close))
     control_frame.add_control(bltCloseFrameButton(control_frame))
-    control_frame.add_control(bltTextBox(control_frame,2,2, "Text Box", length=8))
+    control_frame.add_control(bltTextBox(control_frame,2,2, "Text Box", length=9))
     control_frame.add_control(bltCheckBoxButton(control_frame, 2, 4, label="CheckboxA"))
     control_frame.add_control(bltCheckBoxButton(control_frame, 2, 5, label="CheckboxB"))
     control_frame.add_control(bltCheckBoxButton(control_frame, 2, 6, label="CheckboxC"))
@@ -36,14 +36,15 @@ def initilize():
     radio = bltRadio(control_frame,2, 9, label="Radio Button")
     control_frame.add_control(radio)
 
-    radio_listener = Frame(30, 45, 18, 4, color='purple', bkcolor='darkest purple', title="Radio Selection")
-    radio.register(radio_listener)
+    radio_listener = Frame(30, 45, 18, 4, title="Radio Selection")
+    print "Radio Events: {0}".format(radio.subscribers)
+    radio.register('changed', radio_listener)
 
 
 
 
 
-    sample_text_frame = Frame(5,30 , 10,10, color='dark azure', bkcolor='darkest azure', visible=True )
+    sample_text_frame = Frame(5,30 , 10,10, visible=True )
     sample_text_frame.text = sample_text
     sample_text_frame.add_control(bltResizeFrameButton(sample_text_frame))
 
@@ -61,7 +62,11 @@ def initilize():
     y = 3
 
     for i, c in enumerate(color_grad):
-        frame_list.append(Frame(x, y, 20, 10, title="Test Box {0}".format(i), color=c.blend(bltColor('darkest grey')), bkcolor=c.trans(200), draggable=True, visible=True, skin='DOUBLE'))
+        f = Frame(x, y, 20, 10, title="Test Box {0}".format(i), draggable=True, visible=True, skin='DOUBLE')
+        f.color_skin['BKCOLOR'] = c
+        f.color_skin['COLOR'] = 'darkest grey'
+        frame_list.append(f)
+
         frame_list[-1].add_control(bltResizeFrameButton(frame_list[-1]))
         x += 1
         y += 1
@@ -73,6 +78,8 @@ def initilize():
     slider_g_value = 0
     slider_b_value = 0
     slider_a_value = 255
+
+
 
     def update_r_val(value):
         global slider_r_value
@@ -87,7 +94,7 @@ def initilize():
         global slider_a_value
         slider_a_value = value
 
-    color_picker = Frame(30, 30, 18, 11, "Color Picker", visible=True, color='dark grey', bkcolor=bltColor('darkest grey').trans(200), draggable=True)
+    color_picker = Frame(30, 30, 18, 11, "Color Picker", visible=True, draggable=True)
 
     r_slider = bltSlider(color_picker, 2, 2, 14, slider_r_value, min_val=0, max_val=255, update_func=update_r_val, label='R', style='fill')
     g_slider = bltSlider(color_picker, 2, 4, 14, slider_g_value, min_val=0, max_val=255, update_func=update_g_val, label='G', style='fill')
@@ -198,7 +205,24 @@ def draw_demo():
     background.draw()
 
 initilize()
-draw_demo()
+#draw_demo()
+
+list_frame = Frame(3,5,9,6, "", frame=True, draggable=False)
+content_frame = bltShowListFrame(12,5,25,20, "", frame=True, draggable=False)
+
+list_box = bltListbox(list_frame, 1, 1, ['Item 1', 'Item 2', 'Item 3', 'Item 4'])
+list_frame.add_control(list_box)
+content_frame.add_control(bltResizeFrameButton(content_frame))
+list_box.register('changed', content_frame)
+
+
+modal = bltModalFrame(45,5,7,7, "Modal", frame=True, draggable=True)
+modal.add_control(bltResizeFrameButton(modal))
+
+
+frame_list.append(list_frame)
+frame_list.append(content_frame)
+frame_list.append(modal)
 
 while True:
     key = bltInput.update()
@@ -208,6 +232,8 @@ while True:
 
     update()
     render()
+
+
     terminal.refresh()
 
 

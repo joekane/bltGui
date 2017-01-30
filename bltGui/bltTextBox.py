@@ -7,7 +7,7 @@ mouse = bltInput.mouse
 
 class bltTextBox(Control):
     def __init__(self, owner, x, y, text="", length=4, color='white', bkcolor='black', frame=None, skin='SINGLE'):
-        Control.__init__(self)
+        Control.__init__(self, ['active', 'changed'])
         self.owner = owner
         self.x = x
         self.y = y
@@ -15,7 +15,7 @@ class bltTextBox(Control):
         self.length = length
         self.color = color
         self.bkcolor = bkcolor
-        self.skin = bltSkins.SKINS[skin]
+        self.skin = bltSkins.GLYPH_SKINS[skin]
         self.active = False
         self.dirty = True
         self.frame_element = False

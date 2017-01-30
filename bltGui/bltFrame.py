@@ -1,7 +1,7 @@
 from bearlibterminal import terminal
 from collections import namedtuple
 import bltInput
-import bltButton
+from bltButton import bltButton
 import textwrap
 import bltSkins
 import bltColor as Color
@@ -17,16 +17,15 @@ class bltFrame(Control):
 
     layer_index = 10
 
-    def __init__(self, x, y, w ,h, title=None, color=None, bkcolor=None, frame=True, layer=None, text="", draggable=False, visible=True, skin=None):
-        Control.__init__(self)
+    def __init__(self, x, y, w ,h, title=None, frame=True, layer=None, text="", draggable=False, visible=True, skin=None, color_skin=None):
+        Control.__init__(self, ['close', 'show'])
         self.pos = Pos(x, y)
         self.width = w
         self.height = h
         self.title = title
         self._wrapped_text = self.wrap_text(text)
         self._fulltext = text
-        self.color = color
-        self.bkcolor = bkcolor
+
         self.frame = frame
         if layer is None:
             self.layer = bltFrame.layer_index
@@ -40,9 +39,13 @@ class bltFrame(Control):
         self.visible = visible
         self.controls = []
         if skin:
-            self.skin = bltSkins.SKINS[skin]
+            self.skin = dict(bltSkins.GLYPH_SKINS[skin])
         else:
-            self.skin = bltSkins.SKINS['SINGLE']
+            self.skin = dict(bltSkins.GLYPH_SKINS['SINGLE'])
+        if color_skin:
+            self.color_skin = dict(bltSkins.COLOR_SKINS[color_skin])
+        else:
+            self.color_skin = dict(bltSkins.COLOR_SKINS['DEFAULT'])
         self._dirty = True
         self.hover = False
         self.clicked = False
@@ -132,14 +135,18 @@ class bltFrame(Control):
         for x1 in range(self.width):
             for y1 in range(self.height):
 
-                if self.bkcolor:
+                '''
+                if color_skin['BKCOLOR']:
                     old_color = terminal.state(terminal.TK_COLOR)
                     terminal.color(self.bkcolor)
                     terminal.puts(x1 + self.pos.x, y1 + self.pos.y, self.skin['BACKGROUND'])
                     terminal.color(old_color)
                 if self.color:
                     terminal.color(self.color)
-
+                '''
+                terminal.color(self.color_skin['BKCOLOR'])
+                terminal.puts(x1 + self.pos.x, y1 + self.pos.y, self.skin['BACKGROUND'])
+                terminal.color(self.color_skin['COLOR'])
                 if self.frame:
                     # Colors
                     if (x1, y1) == (0, 0):
@@ -195,7 +202,7 @@ class bltFrame(Control):
                 bltFrame.layer_index += 1
             else:
                 self.clicked = False
-            if mouse.clicked_rect(self.pos.x, self.pos.y, self.width, 1, layer=self.layer):
+            if mouse.clicked_rect(self.pos.x, self.pos.y, self.width, 1, layer=self.layer) and self.draggable:
                 self.dragging = True
             else:
                 if mouse.active_layer > self.layer:
@@ -272,22 +279,39 @@ class bltFrame(Control):
 
 
 class bltModalFrame(bltFrame):
-    def __init__(self, x, y, w, h, title=None, color=None, bkcolor=None, frame=True, layer=255, text="", draggable=False,
-             visible=True, skin='DOUBLE'):
-        bltFrame.__init__(self, x, y, w, h, title=None, color=None, bkcolor=None, frame=True, layer=255, text="",
-                          draggable=False,
-                          visible=True,
-                          skin='DOUBLE')
+    def __init__(self, *args, **kwargs):
+        bltFrame.__init__(self, *args, **kwargs)
+
+        #self.background = bltFrame(0, 0, 80, 24, bkcolor=Color("200,255,255,255"))
         self.add_control(bltButton(self, 2, 2, "1", function=bltButton.close))
         self.add_control(bltButton(self, 4, 2, "2", function=bltButton.close))
 
+    '''
     def draw(self):
-        grey = bltFrame(0,0, 80, 24, bkcolor=Color("200,255,255,255"))
         while True:
-            grey.draw()
+            #self.background.draw()
             bltFrame.draw(self)
             for c in self.controls:
                 c.draw()
+    '''
+
+
+class bltShowListFrame(bltFrame):
+    def __init__(self, *args, **kwargs):
+        bltFrame.__init__(self, *args, **kwargs)
+
+    def get_dispatch(self, value):
+        print "Things!"
+        if value == 0:
+            self.text = "[c=red]Item 1[/c] This is the first item on the list!."
+        if value == 1:
+            self.text = "[c=red]Item 2[/c] This is the second item on the list!. And its really long ... alkjdshflkashdfkasdfkshxdtfhas  selhf dsa fjsadf aslkdf salkdf alkskjhs  jidskf asefa sfas saehf lasdf lausd f"
+        if value == 2 :
+            self.text = "[c=red]Item 3[/c] This one is not."
+        if value == 3:
+            self.text = "[c=red]Item 4[/c] Last one! 01011001010 0 10 10101 010 1 1 01 0 0 0 1100010 10 "
+        self.dirty = True
+
 
 
 

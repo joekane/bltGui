@@ -4,7 +4,7 @@ from bltControl import bltControl as Control
 
 class bltButton(Control):
     def __init__(self, owner, x, y,  text, function=None, length=None):
-        Control.__init__(self)
+        Control.__init__(self, ['hover', 'pressed'])
         self.owner = owner
         self.text = text
         self.x = x

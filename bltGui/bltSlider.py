@@ -14,7 +14,7 @@ class bltSlider(Control):
                  label=None,
                  skin='DOUBLE'
                  ):
-        Control.__init__(self)
+        Control.__init__(self, ['changed'])
         self.owner = owner
         self.x = x
         self.y = y
@@ -33,7 +33,7 @@ class bltSlider(Control):
             self.label = label + ": "
         else:
             self.label = ""
-        self.skin = bltSkins.SKINS[skin]
+        self.skin = bltSkins.GLYPH_SKINS[skin]
         self.dirty = True
         self.frame_element = False
 
@@ -117,7 +117,7 @@ class bltSlider(Control):
             self.set_length(x, mouse.cx)
 
             #print "Slider: Val: {0}, Vpc: {1}".format(self.value, self.value_per_cell)
-            self.dispatch(self.value)
+            self.dispatch('changed', self.value)
             self.dirty = True
         else:
             self.dragging = False

@@ -1,4 +1,4 @@
-SKINS = {
+GLYPH_SKINS = {
     'SINGLE': {
         'BOX_W': "[U+2502]",
         'BOX_NW': "[U+250C]",
@@ -45,4 +45,16 @@ SKINS = {
         'SLIDER_PIP': "[U+2588]",
         'BACKGROUND': "[U+2588]"
     }
+}
+
+COLOR_SKINS = {
+    'DEFAULT': {
+        'COLOR': 'white',
+        'BKCOLOR': "darker azure",
+        'HOVER': "white",
+        'BKHOVER': "dark azure",
+        'SELECTED': "darkest azure",
+        'BKSELECTED': "azure",
+        },
+
 }

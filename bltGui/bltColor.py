@@ -95,6 +95,41 @@ class bltColor(str):
                 pass
         return color_map
 
+    @property
+    def a(self):
+        return self.getRGB()[3]
+
+    @a.setter
+    def a(self, value):
+        r, g, b , a = self.getRGB()
+        self.color = terminal.color_from_argb(value, r, g, b)
+
+    @property
+    def r(self):
+        return self.getRGB()[0]
+
+    @r.setter
+    def r(self, value):
+        r, g, b , a = self.getRGB()
+        self.color = terminal.color_from_argb(a, value, g, b)
+
+    @property
+    def g(self):
+        return self.getRGB()[1]
+
+    @g.setter
+    def g(self, value):
+        r, g, b , a = self.getRGB()
+        self.color = terminal.color_from_argb(a, r, value, b)
+
+    @property
+    def b(self):
+        return self.getRGB()[2]
+
+    @b.setter
+    def b(self, value):
+        r, g, b , a = self.getRGB()
+        self.color = terminal.color_from_argb(a, r, g, value)
 
     def getRGB(self):
         """ Provides RGB values of name, usually for use in alpha transparency """

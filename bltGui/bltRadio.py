@@ -4,7 +4,7 @@ from bltControl import bltControl as Control
 
 class bltRadio(Control):
     def __init__(self, owner, x, y, control_list=None, label=""):
-        Control.__init__(self)
+        Control.__init__(self, ['changed'])
         self.owner = owner
         if not control_list:
             self.control_list = []
@@ -18,9 +18,9 @@ class bltRadio(Control):
 
 
         self.control_list.append(
-            bltCheckBoxButton(self.owner, 1 + x, 1 + y, label="Option 1", checked=True, function=bltButton.select))
+            bltCheckBoxButton(self.owner, 1 + x, 1 + y, label="Option 1", checked=False, function=bltButton.select))
         self.control_list.append(
-            bltCheckBoxButton(self.owner, 1 + x, 2 + y, label="Option 2", checked=False, function=bltButton.select))
+            bltCheckBoxButton(self.owner, 1 + x, 2 + y, label="Option 2", checked=True, function=bltButton.select))
         self.control_list.append(
             bltCheckBoxButton(self.owner, 1 + x, 3 + y, label="Option 3", checked=False, function=bltButton.select))
 
@@ -33,7 +33,7 @@ class bltRadio(Control):
                 for c in self.control_list:
                     c.dirty = True
                     c.draw()
-            self.dispatch(self.selected())
+            self.dispatch('changed', self.selected())
             self.dirty = False
 
 
@@ -44,7 +44,7 @@ class bltRadio(Control):
             for i, c in enumerate(self.control_list):
                 result = i, c.update()
                 if result[1]:
-                    self.dispatch(c.label)
+                    self.dispatch('changed', c.label)
                     change_result = result
             if change_result[1]:
                 for i, c in enumerate(self.control_list):
