@@ -22,15 +22,20 @@ This class is fully compatible with any function that BLT wants a color paramete
 * Checkboxes
 * Sliders
 * TextBoxes
+* List Boxes
 
 ### bltFrames
 * Can contain a list of controls
 * Draggable
-* Resized
+* Resizable
 * Show/Hide
+
+### Skins
+* Each control is fuly skinable
+* Glyphs are stored in one set
+* Color sets in another
 
 ### Additional Features
 * Controls can Publish and Subscribe to changes made from any other control
 * All elements are only drawn when updated (or dirty)
 
-More to come...
